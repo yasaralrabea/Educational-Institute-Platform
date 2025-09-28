@@ -229,8 +229,8 @@
       <div class="card-light">
 @if(!empty($light->photo))
     <img src="{{ $light->photo }}" alt=" ">
-@endif        <h3>{{ $light->lighting }}</h3>
-        <p>العنوان: {{ $light->subject }}</p>
+@endif        <h3>{{ $light->subject }}</h3>
+        <p>العنوان: {{ $light-> lighting}}</p>
         <p>متاح للطلاب: {{ $light->condition ?? '-' }}</p>
         <div class="actions">
           <button onclick="openEditModal({{ $light->id }})">تعديل</button>
