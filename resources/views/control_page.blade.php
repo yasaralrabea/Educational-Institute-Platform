@@ -301,15 +301,18 @@
 
   <!-- محتوى البطاقات -->
   <main>
-    <a href="{{ route('plans.index') }}" class="card-link">
-      <div class="card">
-        <svg xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-width="2"
-             viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" d="M9 17v-6h13v6M9 5v6h13V5M3 7h2v10H3z"/>
-        </svg>
-        <span>الخطط</span>
-      </div>
-    </a>
+  <a href="{{ route('plans.index') }}" class="card-link">
+  <div class="card">
+    <!-- أيقونة جدول خطة -->
+    <svg xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-width="2"
+         viewBox="0 0 24 24">
+      <path stroke-linecap="round" stroke-linejoin="round" 
+            d="M3 3h18v18H3V3z M3 9h18 M9 3v18"/>
+    </svg>
+    <span>الخطط</span>
+  </div>
+</a>
+
 
     <a href="{{ route('tasks.index') }}" class="card-link">
       <div class="card">
@@ -343,15 +346,21 @@
       </div>
     </a>
 
-    <a href="{{ route('absences.index') }}" class="card-link">
-      <div class="card">
-        <svg xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-width="2"
-             viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" d="M9 17v-6h13v6M9 5v6h13V5M3 7h2v10H3z"/>
-        </svg>
-        <span>الغيابات</span>
-      </div>
-    </a>
+   <a href="{{ route('absences.index') }}" class="card-link">
+  <div class="card">
+    <svg xmlns="http://www.w3.org/2000/svg" 
+         fill="none" 
+         viewBox="0 0 24 24" 
+         stroke-width="2" 
+         stroke="currentColor" 
+         class="w-6 h-6">
+      <path stroke-linecap="round" stroke-linejoin="round" 
+            d="M15 14a3 3 0 10-6 0 3 3 0 006 0zM2.458 20.041A9.969 9.969 0 0112 18c2.21 0 4.21.72 5.542 1.941M18 9h6" />
+    </svg>
+    <span>الغيابات</span>
+  </div>
+</a>
+
 
     <a href="{{ route('calendars.index') }}" class="card-link">
       <div class="card">
@@ -364,16 +373,21 @@
       </div>
     </a>
 
-    <a href="{{ route('recitations.index') }}" class="card-link">
-      <div class="card">
-        <svg xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-width="2"
-             viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round"
-                d="M12 20l9-5-9-5-9 5 9 5zm0-10l9-5-9-5-9 5 9 5z"/>
-        </svg>
-        <span>التسميع</span>
-      </div>
-    </a>
+  <a href="{{ route('recitations.index') }}" class="card-link">
+  <div class="card">
+    <svg xmlns="http://www.w3.org/2000/svg" 
+         fill="none" 
+         viewBox="0 0 24 24" 
+         stroke-width="2" 
+         stroke="currentColor" 
+         class="w-6 h-6">
+      <path stroke-linecap="round" stroke-linejoin="round" 
+            d="M12 6c0-.55-.45-1-1-1H6a2 2 0 00-2 2v12a2 2 0 002 2h5c.55 0 1-.45 1-1V6zm0 0c0-.55.45-1 1-1h5a2 2 0 012 2v12a2 2 0 01-2 2h-5c-.55 0-1-.45-1-1V6z" />
+    </svg>
+    <span>التسميع</span>
+  </div>
+</a>
+
 
     <a href="{{ route('fins.index') }}" class="card-link">
       <div class="card">
