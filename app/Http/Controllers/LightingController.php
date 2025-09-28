@@ -28,6 +28,8 @@ class LightingController extends Controller
         'photo' => 'nullable|image|mimes:jpg,jpeg,png,gif|max:2048', // تحقق من نوع وحجم الصورة
     ]);
 
+     $path = null;
+
     // رفع الصورة وتخزينها في public/images
     if ($request->hasFile('photo')) {
         $file = $request->file('photo');
