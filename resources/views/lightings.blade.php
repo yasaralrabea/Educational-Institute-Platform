@@ -228,7 +228,7 @@
     @foreach($lighting as $light)
       <div class="card-light">
 @if(!empty($light->photo))
-    <img src="{{ $light->photo }}" alt="صورة الإضاءة">
+    <img src="{{ $light->photo }}" alt=" ">
 @endif        <h3>{{ $light->lighting }}</h3>
         <p>العنوان: {{ $light->subject }}</p>
         <p>متاح للطلاب: {{ $light->condition ?? '-' }}</p>
