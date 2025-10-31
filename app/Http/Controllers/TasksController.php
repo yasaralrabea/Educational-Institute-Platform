@@ -3,64 +3,63 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Models\Calendar;
+use App\Services\CalendarService;
 
 class TasksController extends Controller
 {
+    protected $service;
+
+    public function __construct(CalendarService $service)
+    {
+        $this->service = $service;
+    }
+
     public function get_calendar()
     {
-    $calendars=Calendar::all();
-
-    return view('calendar', compact('calendars'));
+        $calendars = $this->service->list();
+        return view('calendar', compact('calendars'));
     }
 
     public function store(Request $request)
     {
-        Calendar::create([
-
-            'date'=>$request->date,
-            'goal'=>$request->goal,
-             'condition'=>$request->condition,
-             'students'=>$request->students,
+        $request->validate([
+            'date' => 'required|date',
+            'goal' => 'required|string|max:255',
+            'condition' => 'nullable|string|max:255',
+            'students' => 'nullable|string|max:255'
         ]);
-         return redirect()->route('calendars.index')->with('success', 'تمت إضافة الهدف بنجاح ');
 
+        $this->service->create($request->all());
+        return redirect()->route('calendars.index')->with('success', 'تمت إضافة الهدف بنجاح');
     }
 
-    public function update(Request $request,$id)
+    public function update(Request $request, $id)
     {
-        $calendar=Calendar::find($id);
-        $calendar->update($request->only(['date', 'goal', 'condition']));
-        return redirect()->route('calendars.index')->with('success', 'تم تعديل الهدف بنجاح ');
+        $request->validate([
+            'date' => 'required|date',
+            'goal' => 'required|string|max:255',
+            'condition' => 'nullable|string|max:255',
+        ]);
 
-
+        $this->service->update($id, $request->all());
+        return redirect()->route('calendars.index')->with('success', 'تم تعديل الهدف بنجاح');
     }
 
-    
     public function destroy($id)
     {
-        $calendar=Calendar::find($id);
-         $calendar->condition='ملغي';
-        $calendar->save();
-        $calendar->delete();
-        return redirect()->route('calendars.index')->with('success', 'تم حذف الهدف بنجاح ');
-
+        $this->service->delete($id);
+        return redirect()->route('calendars.index')->with('success', 'تم حذف الهدف بنجاح');
     }
 
-     public function done($id)
+    public function done($id)
     {
-        $calendar=Calendar::find($id);
-        $calendar->condition='تم';
-        $calendar->save();
-        return redirect()->route('calendars.index')->with('success', 'تم انجاز الهدف بنجاح ');
-
+        $this->service->markDone($id);
+        return redirect()->route('calendars.index')->with('success', 'تم انجاز الهدف بنجاح');
     }
 
     public function my_calendar()
     {
-        $calendar=Calendar::where('students','yes')->get();
-        return view('my_calendar',compact('calendar'));
+        $calendar = $this->service->studentCalendar();
+        return view('my_calendar', compact('calendar'));
     }
-    
-
 }

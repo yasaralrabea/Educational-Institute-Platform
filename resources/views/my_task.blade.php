@@ -3,7 +3,7 @@
 <html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
-    <title>عرض الواجب -  </title>
+    <title>عرض الالعمل -  </title>
     <meta name="viewport" content="width=device-width,initial-scale=1">
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700&display=swap" rel="stylesheet">
     <style>
@@ -234,16 +234,16 @@
     @endif
 
    <div class="card">
-    <h2>الواجب: {{ $task->subject }}</h2>
+    <h2>الالعمل: {{ $task->subject }}</h2>
     <div class="status">
         الحالة:
         @if($task)
             <strong>تم التسليم</strong><br>
-            التقييم: {{ $rate>rate ?? 'لم يتم التصحيح بعد' }}<br>
+            التقييم: {{ $rate->rate ?? 'لم يتم التصحيح بعد' }}<br>
 
             {{-- عرض الرابط إذا موجود --}}
             @if($task->url)
-                رابط الواجب: <a href="{{ $task->url }}" target="_blank">{{ $task->url }}</a><br>
+                رابط الالعمل: <a href="{{ $task->url }}" target="_blank">{{ $task->url }}</a><br>
             @endif
 
             {{-- عرض الملف إذا موجود --}}
@@ -255,22 +255,22 @@
             <strong>لم يتم التسليم</strong>
         @endif
     </div>
-    <a href="{{ route('s_index') }}" class="btn">العودة للواجبات</a>
+    <a href="{{ route('s_index') }}" class="btn">العودة للالعملات</a>
 </div>
 
 
     <div class="card">
-        <h2>تسليم الواجب</h2>
+        <h2>تسليم الالعمل</h2>
         <form action="{{ route('task_store') }}" method="POST" enctype="multipart/form-data">
             @csrf
             <input type="hidden" name="task_id" value="{{ $task->id }}">
             <label>ملاحظات الطالب</label>
             <textarea name="submission" rows="4">{{ old('submission', $rate->submission ?? '') }}</textarea>
-            <label>رابط الواجب (اختياري)</label>
+            <label>رابط الالعمل (اختياري)</label>
             <input type="url" name="url" value="{{ old('url', $rate->url ?? '') }}">
             <label>رفع ملف (اختياري)</label>
             <input type="file" name="file">
-            <button type="submit" class="btn">تسليم الواجب</button>
+            <button type="submit" class="btn">تسليم الالعمل</button>
         </form>
     </div>
 </main>

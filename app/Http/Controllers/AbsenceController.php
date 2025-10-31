@@ -3,101 +3,66 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Models\Student;
-use App\Models\Absence;
-use Illuminate\Support\Facades\Auth;
+use App\Services\AbsenceService;
 
 class AbsenceController extends Controller
 {
-   public function absences(Request $request)
-{
-    $query = Absence::with(['student' => fn($q) => $q->withCount('absences')]);
+    protected $service;
 
-    if ($request->filled('from_date') && $request->filled('to_date')) {
-        $from = $request->input('from_date');
-        $to = $request->input('to_date');
-        $query->whereBetween('date', [$from, $to]);
-    } elseif ($request->filled('from_date')) {
-        $query->whereDate('date', '>=', $request->input('from_date'));
-    } elseif ($request->filled('to_date')) {
-        $query->whereDate('date', '<=', $request->input('to_date'));
-    }
-
-    $absences = $query->get();
-    $students = Student::withCount('absences')->get();
-
-    return view('absences', compact('absences','students'));
-}
-
-
-public function store(Request $request)
-{
-    $absent=$request->input('absent',[]);
-    $reasons=$request->input('reason',[]);
-    $date=now()->toDateString();
-
-    foreach($absent as $studentId=>$value)
+    public function __construct(AbsenceService $service)
     {
-
-    Absence::create([
-        'student_id'=>$studentId,
-        'date'=>$date,
-        'reason'=>$reasons[$studentId]?? null,
-    ]);
-
+        $this->service = $service;
     }
-    return redirect()->route('absences.index')
-                     ->with('success', 'تم تسجيل الغياب بنجاح 🗑');
-}
+
+    public function absences(Request $request)
+    {
+        $data = $this->service->listAbsences(
+            $request->input('from_date'),
+            $request->input('to_date')
+        );
+
+        return view('absences', $data);
+    }
+
+    public function store(Request $request)
+    {
+        $this->service->storeAbsences(
+            $request->input('absent', []),
+            $request->input('reason', [])
+        );
+
+        return redirect()->route('absences.index')
+                         ->with('success', 'تم تسجيل الغياب بنجاح 🗑');
+    }
 
     public function destroy($id)
-{
-    $absence = Absence::findOrFail($id);
-    $absence->delete();
-
-    return redirect()->route('absences.index')
-                     ->with('success', 'تم حذف الغياب بنجاح 🗑');
-}
-
-  public function update(Request $request, $id)
     {
-        $absence = Absence::findOrFail($id);
+        $this->service->deleteAbsence($id);
 
+        return redirect()->route('absences.index')
+                         ->with('success', 'تم حذف الغياب بنجاح 🗑');
+    }
+
+    public function update(Request $request, $id)
+    {
         $request->validate([
             'date' => 'required|date',
             'reason' => 'nullable|string|max:255',
         ]);
 
-        $absence->update([
-            'date' => $request->date,
-            'reason' => $request->reason,
-        ]);
+        $this->service->updateAbsence($id, $request->only(['date', 'reason']));
 
-        return redirect()->route('absences.index')->with('success', 'تم تحديث الغياب بنجاح');
+        return redirect()->route('absences.index')
+                         ->with('success', 'تم تحديث الغياب بنجاح');
     }
 
-     public function my_absences(Request $request)
-{
-    $userId = auth()->id();
-    $student = Student::where('user_id', $userId)->first();
+    public function my_absences(Request $request)
+    {
+        $absences = $this->service->getMyAbsences(
+            $request->input('fromDate'),
+            $request->input('toDate')
+        );
 
-    $absencesQuery = Absence::where('student_id', $student->id);
-
-    $fromDate = $request->get('fromDate');
-    $toDate = $request->get('toDate');
-
-    if ($fromDate) {
-        $absencesQuery->whereDate('date', '>=', $fromDate);
+        return view('my_absences', compact('absences'));
     }
-    if ($toDate) {
-        $absencesQuery->whereDate('date', '<=', $toDate);
-    }
-
-    $absences = $absencesQuery->orderBy('date', 'desc')->get();
-
-    return view('my_absences', compact('absences'));
 }
-}
-
-
-

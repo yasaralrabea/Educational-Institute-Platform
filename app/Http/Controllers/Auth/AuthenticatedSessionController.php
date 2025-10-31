@@ -36,11 +36,26 @@ class AuthenticatedSessionController extends Controller
         }
 
         else if(auth()->user()->role=='user') {
-                return redirect()->intended('/');
+                return redirect()->intended('/home');
 
         }
+
     }
 
+    public function home()
+        {
+              if(auth()->user()->role=='admin')
+        {
+                 return redirect('/control_page');
+
+   
+        }
+
+        else if(auth()->user()->role=='user') {
+                return redirect()->intended('/home');
+
+        }
+        }
     /**
      * Destroy an authenticated session.
      */

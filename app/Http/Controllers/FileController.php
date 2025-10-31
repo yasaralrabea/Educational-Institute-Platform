@@ -3,14 +3,21 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Services\FileService;
 use App\Models\File;
-use Illuminate\Support\Facades\Storage;
 
 class FileController extends Controller
 {
-     public function index()
+    protected $service;
+
+    public function __construct(FileService $service)
     {
-        $files = File::orderBy('created_at','desc')->get();
+        $this->service = $service;
+    }
+
+    public function index()
+    {
+        $files = $this->service->listFiles();
         return view('files', compact('files'));
     }
 
@@ -21,14 +28,7 @@ class FileController extends Controller
             'file' => 'required|file|max:10240',
         ]);
 
-        $uploadedFile = $request->file('file');
-        $path = $uploadedFile->store('uploads', 'public');
-
-        File::create([
-            'name' => $request->name,
-            'type' => $uploadedFile->getClientOriginalExtension(),
-            'path' => $path,
-        ]);
+        $this->service->storeFile($request);
 
         return redirect()->route('files.index')->with('success', 'تم رفع الملف بنجاح.');
     }
@@ -40,27 +40,14 @@ class FileController extends Controller
             'file' => 'nullable|file|max:10240',
         ]);
 
-
-        if ($request->hasFile('file')) {
-
-            Storage::disk('public')->delete($file->path);
-
-            $uploadedFile = $request->file('file');
-            $path = $uploadedFile->store('uploads', 'public');
-            $file->path = $path;
-            $file->type = $uploadedFile->getClientOriginalExtension();
-        }
-
-        $file->name = $request->name;
-        $file->save();
+        $this->service->updateFile($request, $file);
 
         return redirect()->route('files.index')->with('success', 'تم تعديل الملف بنجاح.');
     }
 
     public function destroy(File $file)
     {
-        Storage::disk('public')->delete($file->path);
-        $file->delete();
+        $this->service->deleteFile($file);
 
         return redirect()->route('files.index')->with('success', 'تم حذف الملف بنجاح.');
     }
