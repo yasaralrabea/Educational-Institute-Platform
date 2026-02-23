@@ -1,245 +1,652 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-<meta charset="UTF-8">
-<title>خطة الطالب</title>
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700&display=swap" rel="stylesheet">
+  <meta charset="UTF-8" />
+  <title>خطتي</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700&display=swap" rel="stylesheet">
 
-<!-- Flatpickr CSS -->
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/themes/material_blue.css">
+  <style>
+    :root{
+      --bg:#f3f6fb;
+      --card:#ffffff;
+      --text:#0f172a;
+      --muted:#64748b;
+      --border:#e5e7eb;
 
-<style>
-*{margin:0;padding:0;box-sizing:border-box;}
-body{font-family:"Cairo",sans-serif;background:#f3f6fb;color:#333;line-height:1.6;}
+      --primary:#253b5c;
+      --primary-dark:#1f2f48;
+      --primary-2:#2563eb;
 
-/* الهيدر */
-header {
-    background: linear-gradient(90deg, #253b5cff, #253b5cff);
-    color:#fff;
-    display:flex;
-    justify-content:space-between;
-    align-items:center;
-    padding:20px 25px;
-    box-shadow:0 4px 20px rgba(0,0,0,0.15);
-    position:sticky;
-    top:0;
-    z-index:900;
-    min-height:70px;
-}
-header h1{ font-size:26px;font-weight:700; flex:1; text-align:center; }
-header .actions{ display:flex; gap:12px; align-items:center; }
-header .actions a, header .actions button{
-    background: rgba(255,255,255,0.15); border:none; color:#fff; cursor:pointer;
-    display:flex; align-items:center; justify-content:center; padding:10px 12px; border-radius:8px; transition:.3s;
-}
-header .actions a:hover, header .actions button:hover{ background: rgba(255,255,255,0.3); }
-header .actions svg{ width:24px; height:24px; }
+      --accent:#ffec1d;
+      --danger:#ef4444;
+      --success:#16a34a;
+      --warning:#f59e0b;
 
-    /* زر القائمة */
-    .menu-btn {
-      flex-shrink: 0;
-      position: fixed;
-      top: 20px;
-      right: 20px;
-      background: #253b5cff;
-      color: #fff;
-      border: none;
-      border-radius: 12px;
-      padding: 10px 12px;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.25);
-      cursor: pointer;
-      transition: background 0.3s, transform 0.2s;
-      z-index: 1100;
+      --shadow: 0 12px 34px rgba(15,23,42,.10);
+      --shadow-sm: 0 6px 18px rgba(15,23,42,.08);
+      --radius: 20px;
     }
-    .menu-btn svg { width: 26px; height: 26px; }
-    .menu-btn:hover { background: #2563eb; transform: translateY(-1px); }
 
-/* القائمة الجانبية */
-.sidebar{
-    position:fixed; top:0; right:-280px; width:280px; height:100%;       background: #253b5cff;
-; color:#fff; padding:25px 20px;
-    box-shadow:-4px 0 20px rgba(0,0,0,0.3); transition:right .4s; z-index:1000; border-radius:8px 0 0 8px; overflow-y:auto;
-}
-.sidebar.open{ right:0; }
-.sidebar-header{ display:flex; justify-content:space-between; align-items:center; margin-bottom:25px; }
-.sidebar h2{ font-size:18px; font-weight:700; text-align:center; }
-.sidebar .close-btn{ background:none; border:none; color:#fff; font-size:24px; cursor:pointer; }
-.sidebar a{
-    display:flex; align-items:center; gap:12px; color:#fff; text-decoration:none; margin-bottom:16px; font-size:16px; font-weight:600; padding:14px 18px;
-    border-radius:12px; background:#2d3748; box-shadow:0 4px 12px rgba(0,0,0,0.25); transition:.3s;
-}
-.sidebar a:hover{       background: #253b5cff;
-; transform:translateY(-2px); box-shadow:0 6px 16px rgba(0,0,0,0.35); }
+    *{margin:0;padding:0;box-sizing:border-box;}
+    body{
+      font-family:"Cairo",sans-serif;
+      background:var(--bg);
+      color:var(--text);
+      line-height:1.65;
+      min-height:100vh;
+    }
+    a{color:inherit;}
+    button{font-family:inherit;}
+    .container{
+      width:min(1200px, calc(100% - 32px));
+      margin-inline:auto;
+    }
 
-/* المحتوى */
-main{padding:40px; max-width:1200px; margin:auto;}
-h2{margin-bottom:20px; color:#253b5cff;}
+    /* Background */
+    .background{
+      position:fixed;
+      inset:0;
+      background:
+        radial-gradient(1200px 420px at 12% 0%, rgba(37,99,235,.14), transparent 55%),
+        radial-gradient(900px 360px at 92% 10%, rgba(255,236,29,.16), transparent 62%),
+        radial-gradient(800px 320px at 40% 100%, rgba(37,99,235,.08), transparent 55%),
+        #f8fafc;
+      z-index:-2;
+    }
 
-.card-plan{
-    background:#fff; border-radius:16px; box-shadow:0 6px 18px rgba(0,0,0,.08);
-    padding:25px; margin-bottom:30px; display:flex; flex-direction:column; gap:10px;
-}
-.card-plan span{ font-weight:600; color:#374151; }
-.card-plan p{ font-size:16px; color:#253b5cff; }
+    /* ===== Header ===== */
+    header{
+      position: sticky;
+      top: 0;
+      z-index: 900;
+      background: linear-gradient(90deg, var(--primary), var(--primary-dark));
+      color:#fff;
+      box-shadow: 0 8px 30px rgba(0,0,0,.15);
+    }
+    .header-inner{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:16px;
+      padding: 14px 0;
+      min-height: 68px;
+    }
+    .header-title{
+      display:flex;
+      align-items:center;
+      gap:10px;
+      font-weight:900;
+      font-size:22px;
+      text-align:center;
+      margin:0 auto;
+      white-space:nowrap;
+      overflow:hidden;
+      text-overflow:ellipsis;
+      max-width: 70vw;
+    }
+    .badge{
+      font-size: 12px;
+      font-weight: 900;
+      padding: 4px 10px;
+      border-radius: 999px;
+      background: rgba(255,255,255,.14);
+      border: 1px solid rgba(255,255,255,.18);
+      color: rgba(255,255,255,.92);
+    }
 
-/* أزرار الفلتر */
-.filter-buttons{ display:flex; gap:10px; margin-bottom:20px; flex-wrap:wrap; }
-.btn-plan, .btn-calendar{
-    padding:8px 16px;
-    border-radius:10px;
-    border:none;
-    cursor:pointer;
-    font-weight:600;
-    color:#fff;
-          background: #253b5cff;
-;
-    transition:.3s;
-    text-decoration:none;
-    display:inline-flex;
-    align-items:center;
-    justify-content:center;
-}
-.btn-plan:hover, .btn-calendar:hover{ background:#2563EB; }
-.btn-plan.active{ background:#1E40AF; }
-.btn-calendar{ margin-left:auto; }
+    .header-actions{
+      display:flex;
+      gap:10px;
+      align-items:center;
+      flex-shrink:0;
+    }
+    .icon-btn{
+      background: rgba(255,255,255,.14);
+      border: 1px solid rgba(255,255,255,.18);
+      color:#fff;
+      cursor:pointer;
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      width:42px;
+      height:42px;
+      border-radius:14px;
+      transition:.22s;
+      outline:none;
+      text-decoration:none;
+    }
+    .icon-btn:hover{ background: rgba(255,255,255,.24); transform: translateY(-1px); }
+    .icon-btn:focus-visible{ box-shadow: 0 0 0 3px rgba(37,99,235,.45); }
+    .icon-btn svg{ width:22px;height:22px; }
 
-/* جدول */
-.table-wrapper{
-    background:#fff; border-radius:16px; box-shadow:0 6px 18px rgba(0,0,0,.08);
-    overflow-x:auto; padding:20px;
-}
-table{ width:100%; border-collapse:separate; border-spacing:0 10px; }
-th{ background:#f1f5f9; color:#253b5cff; font-weight:700; padding:14px; font-size:15px; }
-td{ background:#fff; padding:14px; text-align:center; border-radius:10px; box-shadow:0 2px 6px rgba(0,0,0,.05); font-size:15px; }
-tbody tr:hover td{ background:#f9fafc; }
-.calendar-input{ cursor:pointer; text-align:center; background:#eef2f7; border:1px solid #ccc; border-radius:8px; padding:8px; width:120px; }
-</style>
+    /* ===== Menu Button ===== */
+    .menu-btn{
+      position: fixed;
+      top: 18px;
+      right: 18px;
+      z-index: 1100;
+      width:46px;
+      height:46px;
+      border:none;
+      border-radius: 16px;
+      cursor:pointer;
+      background: rgba(255,255,255,.14);
+      border: 1px solid rgba(255,255,255,.18);
+      color:#fff;
+      box-shadow: 0 12px 26px rgba(0,0,0,.22);
+      backdrop-filter: blur(10px);
+      transition: .22s;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+    }
+    .menu-btn:hover{ background: rgba(255,255,255,.24); transform: translateY(-1px); }
+    .menu-btn svg{ width:26px; height:26px; }
+
+    /* ===== Sidebar + Overlay ===== */
+    .overlay{
+      position: fixed;
+      inset:0;
+      background: rgba(0,0,0,.45);
+      z-index: 1000;
+      display:none;
+    }
+    .overlay.open{ display:block; }
+
+    .sidebar{
+      position: fixed;
+      top: 0;
+      right: -340px;
+      width: 310px;
+      max-width: calc(100% - 48px);
+      height: 100%;
+      background: linear-gradient(180deg, var(--primary), var(--primary-dark));
+      color:#fff;
+      padding: 18px;
+      box-shadow: -14px 0 34px rgba(0,0,0,.35);
+      transition: right .32s ease;
+      z-index: 1101;
+      border-radius: 22px 0 0 22px;
+      overflow:auto;
+    }
+    .sidebar.open{ right: 0; }
+
+    .sidebar-header{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:12px;
+      margin-bottom: 16px;
+      padding-bottom: 12px;
+      border-bottom: 1px solid rgba(255,255,255,.14);
+    }
+    .sidebar-title{
+      font-size:18px;
+      font-weight:900;
+    }
+    .close-sidebar{
+      width:42px;height:42px;
+      border-radius:14px;
+      border: 1px solid rgba(255,255,255,.18);
+      background: rgba(255,255,255,.10);
+      color:#fff;
+      cursor:pointer;
+      transition:.2s;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      font-size:22px;
+      line-height:1;
+    }
+    .close-sidebar:hover{ background: rgba(255,255,255,.20); }
+
+    .sidebar a{
+      display:flex;
+      align-items:center;
+      gap:12px;
+      padding: 12px 12px;
+      border-radius: 16px;
+      text-decoration:none;
+      color:#fff;
+      background: rgba(255,255,255,.08);
+      border: 1px solid rgba(255,255,255,.10);
+      margin-bottom: 10px;
+      transition:.22s;
+      font-weight: 800;
+    }
+    .sidebar a:hover{
+      background: rgba(255,236,29,.92);
+      color:#111827;
+      transform: translateX(-2px);
+    }
+    .sidebar a.active{
+      background: rgba(255,255,255,.18);
+      border-color: rgba(255,255,255,.24);
+    }
+
+    /* ===== Main ===== */
+    main{ padding: 18px 0 70px; }
+
+    .hero{
+      margin-top: 18px;
+      border-radius: var(--radius);
+      padding: 18px;
+      background: linear-gradient(135deg, rgba(37,99,235,.18), rgba(255,236,29,.14));
+      border: 1px solid rgba(255,255,255,.30);
+      box-shadow: 0 18px 40px rgba(0,0,0,.10);
+      backdrop-filter: blur(10px);
+    }
+    .hero-top{
+      display:flex;
+      align-items:flex-start;
+      justify-content:space-between;
+      gap:12px;
+      flex-wrap:wrap;
+    }
+    .hero-title{
+      color:#fff;
+      font-weight: 900;
+      font-size: 20px;
+      letter-spacing:.2px;
+    }
+    .hero-sub{
+      color: rgba(255,255,255,.88);
+      font-size: 14px;
+      margin-top: 6px;
+      max-width: 70ch;
+      font-weight: 700;
+    }
+
+    /* Cards */
+    .card{
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      padding: 16px;
+    }
+
+    .profile-grid{
+      margin-top: 14px;
+      display:grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 12px;
+    }
+    .info{
+      border-radius: 18px;
+      padding: 14px;
+      background: rgba(255,255,255,.92);
+      border: 1px solid rgba(255,255,255,.85);
+      box-shadow: var(--shadow-sm);
+    }
+    .info b{
+      display:block;
+      font-size: 13px;
+      color: var(--muted);
+      font-weight: 900;
+    }
+    .info span{
+      display:block;
+      font-size: 15px;
+      color: var(--primary);
+      margin-top: 6px;
+      font-weight: 900;
+      word-break: break-word;
+    }
+
+    /* Filter / tools */
+    .filter-bar{
+      display:flex;
+      gap:12px;
+      align-items:end;
+      flex-wrap:wrap;
+    }
+    .field{
+      display:flex;
+      flex-direction:column;
+      gap:6px;
+      min-width: 180px;
+    }
+    label{ font-weight:900; color:#334155; font-size:13px; }
+
+    .form-control{
+      width:100%;
+      padding: 11px 12px;
+      border-radius: 14px;
+      border: 1px solid var(--border);
+      font-size: 14px;
+      background:#fff;
+      transition:.2s;
+      outline:none;
+    }
+    .form-control:focus{
+      border-color: rgba(37,99,235,.55);
+      box-shadow: 0 0 0 3px rgba(37,99,235,.18);
+    }
+
+    /* Buttons */
+    .btn{
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      gap:8px;
+      padding: 11px 16px;
+      border-radius: 14px;
+      border: 1px solid transparent;
+      cursor:pointer;
+      font-weight: 900;
+      font-size: 14px;
+      transition:.2s;
+      text-decoration:none;
+      white-space:nowrap;
+      user-select:none;
+    }
+    .btn-primary{ background: var(--primary-2); color:#fff; }
+    .btn-primary:hover{ filter: brightness(.96); transform: translateY(-1px); }
+    .btn-outline{
+      background:#fff;
+      border-color: var(--border);
+      color: var(--text);
+    }
+    .btn-outline:hover{ background:#f9fafb; transform: translateY(-1px); }
+    .btn-chip{
+      padding: 10px 14px;
+      border-radius: 999px;
+      border: 1px solid var(--border);
+      background:#fff;
+      color: var(--text);
+      font-weight: 900;
+    }
+    .btn-chip.active{
+      background: rgba(37,99,235,.10);
+      border-color: rgba(37,99,235,.30);
+      color: var(--primary);
+    }
+
+    /* Table */
+    .table-wrap{ overflow:auto; margin-top: 14px; }
+    table{
+      width:100%;
+      border-collapse: separate;
+      border-spacing: 0 10px;
+      min-width: 900px;
+    }
+    thead th{
+      position: sticky;
+      top: 0;
+      z-index: 2;
+      background: #f1f5f9;
+      color: var(--primary);
+      font-weight: 900;
+      padding: 12px 14px;
+      font-size: 13px;
+      text-align:center;
+      border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+    }
+    tbody td{
+      background:#fff;
+      padding: 12px 14px;
+      text-align:center;
+      border-radius: 14px;
+      border: 1px solid var(--border);
+      box-shadow: 0 2px 12px rgba(0,0,0,.04);
+      font-size: 14px;
+      vertical-align: middle;
+    }
+    tbody tr:hover td{ background:#fbfdff; }
+
+    .pill{
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      padding: 6px 10px;
+      border-radius: 999px;
+      font-weight: 900;
+      font-size: 12px;
+      border: 1px solid var(--border);
+      background: #f8fafc;
+      color: #334155;
+    }
+
+    .muted{
+      color: var(--muted);
+      font-weight: 800;
+    }
+
+    /* Responsive */
+    @media (max-width: 1024px){
+      .profile-grid{ grid-template-columns: repeat(2, 1fr); }
+    }
+    @media (max-width: 820px){
+      .header-title{ font-size: 20px; }
+      .menu-btn{ top: 14px; right: 14px; }
+      table{ min-width: 820px; }
+      .field{ min-width: 160px; }
+    }
+    @media (max-width: 640px){
+      .container{ width: calc(100% - 24px); }
+      .header-inner{ padding: 12px 0; }
+      .header-title{ margin:0; max-width: 64vw; }
+
+      .profile-grid{ grid-template-columns: 1fr; }
+
+      /* table -> cards */
+      .table-wrap{ overflow: visible; }
+      table{ min-width: unset; border-spacing: 0; }
+      thead{ display:none; }
+
+      tbody, tr, td{ display:block; width:100%; }
+      tbody tr{
+        background:#fff;
+        border: 1px solid var(--border);
+        border-radius: 20px;
+        padding: 10px;
+        box-shadow: var(--shadow-sm);
+        margin-bottom: 12px;
+      }
+      tbody td{
+        border:none;
+        box-shadow:none;
+        text-align:right;
+        padding: 8px 8px;
+        border-radius: 0;
+        display:flex;
+        justify-content:space-between;
+        gap:12px;
+      }
+      tbody td::before{
+        content: attr(data-label);
+        font-weight: 900;
+        color:#334155;
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce){
+      *{ transition:none !important; animation:none !important; }
+    }
+  </style>
 </head>
+
 <body>
+  <div class="background"></div>
 
-<button class="menu-btn" onclick="toggleSidebar()">
-<svg xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-<path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7"/>
-</svg>
-</button>
+  <!-- زر القائمة -->
+  <button class="menu-btn" id="menuBtn" type="button" aria-label="فتح القائمة" onclick="toggleSidebar()">
+    <svg xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+      <path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16"/>
+    </svg>
+  </button>
 
-<header>
-<h1>خطتي</h1>
-<div class="actions">
-<a href="{{ route('my.profile') }}" title="حسابي">
-<svg xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-width="2"
-viewBox="0 0 24 24">
-<path stroke-linecap="round" stroke-linejoin="round"
-d="M5.121 17.804A13.937 13.937 0 0112 15a13.937 13.937 0 016.879 2.804M15 10a3 3 0 11-6 0 3 3 0 016 0z"/>
-</svg>
-</a>
-<form method="POST" action="{{ route('logout') }}">
-@csrf
-<button type="submit" title="تسجيل خروج">
-<svg xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-width="2"
-viewBox="0 0 24 24">
-<path stroke-linecap="round" stroke-linejoin="round"
-d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a2 2 0 01-2 2H7a2 2 0 01-2-2v-1m0-10V5a2 2 0 012-2h4a2 2 0 012 2v1"/>
-</svg>
-</button>
-</form>
-</div>
-</header>
+  <!-- الهيدر -->
+  <header>
+    <div class="container header-inner">
+      <div style="width:46px; height:46px; flex-shrink:0;"></div>
 
-<div class="sidebar" id="sidebar">
-<div class="sidebar-header">
-<h2>القائمة</h2>
-<button class="close-btn" onclick="toggleSidebar()">×</button>
-</div>
-<a href="{{ route('home') }}">الرئيسية</a>
-<a href="{{ route('my.absences') }}">غياباتي</a>
-<a href="{{ route('my.profile') }}">ملفي الشخصي</a>
-<a href="{{ route('my.calendar') }}">التقويم</a>
-<a href="{{ route('my.plan') }}">خطتي</a>
-<a href="{{ route('s_index') }}">مهامي</a>
-</div>
+      <h1 class="header-title">
+        خطتي
+        <span class="badge">Plan</span>
+      </h1>
 
-<main>
-<div class="card-plan">
-<p><span>الاسم:</span> {{ $student->name }}</p>
-<p><span>المسار:</span> {{ $student->track }}</p>
-<p><span>الحفظ:</span> {{ $student->memorization }}</p>
-<p><span>الهدف:</span> {{ $student->goal }}</p>
-<p><span>الأجزاء:</span> {{ $student->juz }}</p>
-</div>
-<!-- أزرار الفلتر والخطة مع فلتر التاريخ -->
-<div class="filter-buttons">
-    <!-- زر أسبوعية -->
-    <a href="{{ route('my.plan', ['plan_type'=>'weekly']) }}" 
-       class="btn-plan {{ request('plan_type')=='weekly' ? 'active' : '' }}">أسبوعية</a>
+      <div class="header-actions">
+        <a class="icon-btn" href="{{ route('my.profile') }}" title="حسابي" aria-label="حسابي">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round"
+              d="M5.121 17.804A13.937 13.937 0 0112 15a13.937 13.937 0 016.879 2.804M15 10a3 3 0 11-6 0 3 3 0 016 0z"/>
+          </svg>
+        </a>
 
-    <!-- زر شهرية -->
-    <a href="{{ route('my.plan', ['plan_type'=>'monthly']) }}" 
-       class="btn-plan {{ request('plan_type')=='monthly' ? 'active' : '' }}">شهرية</a>
+        <form method="POST" action="{{ route('logout') }}">
+          @csrf
+          <button class="icon-btn" type="submit" title="تسجيل خروج" aria-label="تسجيل خروج">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round"
+                d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a2 2 0 01-2 2H7a2 2 0 01-2-2v-1m0-10V5a2 2 0 012-2h4a2 2 0 012 2v1"/>
+            </svg>
+          </button>
+        </form>
+      </div>
+    </div>
+  </header>
 
-    <!-- فلتر التاريخ من - إلى -->
-    <form method="GET" action="{{ route('my.plan') }}" class="btn-plan" style="display:flex; gap:5px; align-items:center;">
-        <input type="date" name="fromDate" class="calendar-input" placeholder="من" value="{{ request('fromDate') }}" style="height:36px;">
-        <input type="date" name="toDate" class="calendar-input" placeholder="إلى" value="{{ request('toDate') }}" style="height:36px;">
-        <button type="submit" class="btn-plan">تصفية</button>
-    </form>
-</div>
+  <!-- Overlay -->
+  <div class="overlay" id="overlay" onclick="closeSidebar()"></div>
 
+  <!-- القائمة الجانبية -->
+  <aside class="sidebar" id="sidebar" aria-label="القائمة الجانبية">
+    <div class="sidebar-header">
+      <div class="sidebar-title">القائمة</div>
+      <button class="close-sidebar" type="button" aria-label="إغلاق" onclick="closeSidebar()">×</button>
+    </div>
 
-<h2>التسميع</h2>
-<div class="table-wrapper">
-<table>
-<thead>
-<tr>
-<th>المادة</th>
-<th>الحالة</th>
-<th>ملاحظات</th>
-<th>التاريخ</th>
-</tr>
-</thead>
-<tbody>
-@forelse($recitation as $rec)
-<tr>
-<td>{{ $rec->notes }}</td>
-<td>{{ $rec->condition == 'no' ? 'لم تسمع' : ($rec->condition == 'done' ? 'تم' : $rec->condition) }}</td>
-<td>{{ $rec->subject }}</td>
-<td><input type="text" class="calendar-input" value="{{ \Carbon\Carbon::parse($rec->date)->format('Y-m-d') }}" readonly></td>
-</tr>
-@empty
-<tr><td colspan="4">لا توجد سجلات تسميع</td></tr>
-@endforelse
-</tbody>
-</table>
-</div>
-</main>
+    <a href="{{ route('home') }}">الرئيسية</a>
+    <a href="{{ route('my.absences') }}">غياباتي</a>
+    <a href="{{ route('my.profile') }}">ملفي الشخصي</a>
+    <a href="{{ route('my.calendar') }}">التقويم</a>
+    <a class="active" href="{{ route('my.plan') }}">خطتي</a>
+    <a href="{{ route('s_index') }}">مهامي</a>
+  </aside>
 
-<!-- Flatpickr JS -->
-<script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
-<script>
-function toggleSidebar() {
-    const sidebar = document.getElementById("sidebar");
-    const menuBtn = document.querySelector(".menu-btn");
-    sidebar.classList.toggle("open");
-    menuBtn.style.display = sidebar.classList.contains("open") ? "none" : "block";
-}
+  <main class="container">
+    <!-- HERO -->
+    <section class="hero">
+      <div class="hero-top">
+        <div>
+          <div class="hero-title">خطة الطالب</div>
+        </div>
+      </div>
 
-// Flatpickr لكل التواريخ
-document.addEventListener("DOMContentLoaded", function(){
-    flatpickr(".calendar-input", {
-        dateFormat: "Y-m-d",
-        allowInput: true,
-        clickOpens: true,
-        locale: "ar"
+      <!-- بطاقة معلومات الطالب -->
+      <div class="profile-grid">
+        <div class="info"><b>الاسم</b><span>{{ $student->name }}</span></div>
+        <div class="info"><b>المسار</b><span>{{ $student->track }}</span></div>
+        <div class="info"><b>الحفظ</b><span>{{ $student->memorization }}</span></div>
+        <div class="info"><b>الهدف</b><span>{{ $student->goal }}</span></div>
+        <div class="info"><b>الأجزاء</b><span>{{ $student->juz }}</span></div>
+      </div>
+    </section>
+
+    <!-- أدوات الفلترة -->
+    <div class="card" style="margin-top:14px;">
+      <div class="filter-bar">
+        <div style="display:flex; gap:10px; flex-wrap:wrap;">
+          <a href="{{ route('my.plan', ['plan_type'=>'weekly']) }}"
+             class="btn btn-chip {{ request('plan_type')=='weekly' ? 'active' : '' }}">أسبوعية</a>
+
+          <a href="{{ route('my.plan', ['plan_type'=>'monthly']) }}"
+             class="btn btn-chip {{ request('plan_type')=='monthly' ? 'active' : '' }}">شهرية</a>
+        </div>
+
+        <form method="GET" action="{{ route('my.plan') }}" class="filter-bar" style="margin-inline-start:auto;">
+          <input type="hidden" name="plan_type" value="{{ request('plan_type') }}">
+
+          <div class="field">
+            <label for="fromDate">من</label>
+            <input id="fromDate" type="date" name="fromDate" class="form-control" value="{{ request('fromDate') }}">
+          </div>
+
+          <div class="field">
+            <label for="toDate">إلى</label>
+            <input id="toDate" type="date" name="toDate" class="form-control" value="{{ request('toDate') }}">
+          </div>
+
+          <div style="display:flex; gap:10px; flex-wrap:wrap;">
+            <button type="submit" class="btn btn-primary">تصفية</button>
+            <a href="{{ route('my.plan', ['plan_type'=>request('plan_type')]) }}" class="btn btn-outline">إظهار الكل</a>
+          </div>
+        </form>
+      </div>
+      <div class="muted" style="margin-top:10px;">
+      </div>
+    </div>
+
+    <!-- جدول التسميع -->
+    <div class="card" style="margin-top:14px;">
+      <div style="display:flex; justify-content:space-between; align-items:center; gap:10px; flex-wrap:wrap;">
+        <h2 style="margin:0; color:var(--primary); font-size:18px; font-weight:900;">التسميع</h2>
+        <span class="pill">عدد السجلات: {{ $recitation->count() }}</span>
+      </div>
+
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>المادة</th>
+              <th>الحالة</th>
+              <th>ملاحظات</th>
+              <th>التاريخ</th>
+            </tr>
+          </thead>
+
+          <tbody>
+            @forelse($recitation as $rec)
+              <tr>
+                <td data-label="المادة">{{ $rec->notes }}</td>
+                <td data-label="الحالة">
+                  <span class="pill">
+                    {{ $rec->condition == 'no' ? 'لم تسمع' : ($rec->condition == 'done' ? 'تم' : $rec->condition) }}
+                  </span>
+                </td>
+                <td data-label="ملاحظات">{{ $rec->subject }}</td>
+                <td data-label="التاريخ">
+                  <span class="pill">{{ \Carbon\Carbon::parse($rec->date)->format('Y-m-d') }}</span>
+                </td>
+              </tr>
+            @empty
+              <tr>
+                <td colspan="4" style="text-align:center; color:var(--muted); padding:16px; font-weight:900;">
+                  لا توجد سجلات تسميع
+                </td>
+              </tr>
+            @endforelse
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </main>
+
+  <script>
+    // Sidebar
+    function toggleSidebar() {
+      const sidebar = document.getElementById("sidebar");
+      const overlay = document.getElementById("overlay");
+      const isOpen = sidebar.classList.toggle("open");
+      overlay.classList.toggle("open", isOpen);
+      document.body.style.overflow = isOpen ? 'hidden' : '';
+    }
+    function closeSidebar(){
+      document.getElementById("sidebar").classList.remove("open");
+      document.getElementById("overlay").classList.remove("open");
+      document.body.style.overflow = '';
+    }
+
+    // ESC closes sidebar
+    document.addEventListener('keydown', (e) => {
+      if(e.key === 'Escape'){
+        closeSidebar();
+      }
     });
-});
-
-// دالة زر عرض التقويم (يمكن تعديلها لتفتح مودال أو نافذة جديدة)
-function openCalendar() {
-    alert("هنا يمكنك ربط التقويم التفاعلي أو مودال التقويم");
-}
-</script>
-
+  </script>
 </body>
 </html>

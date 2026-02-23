@@ -8,12 +8,12 @@ use App\Http\Controllers\TasksController;
 use App\Http\Controllers\PlansController;
 use App\Http\Controllers\MessageController;
 use App\Http\Controllers\LightingController;
-use App\Http\Controllers\AuthenticatedSessionController;
+use App\Http\Controllers\Auth\AuthenticatedSessionController;
 
 
 Route::middleware('auth')->group(function () {
 
-    Route::get('/home', function () {return view('home'); })->name('home'); 
+    Route::get('/home', function () {return view('home'); })->name('home_'); 
 
     Route::get('/', [AuthenticatedSessionController::class, 'home'])->name('home');
 

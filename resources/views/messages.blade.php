@@ -2,7 +2,7 @@
 <html lang="ar" dir="rtl">
 <head>
   <meta charset="UTF-8">
-  <title>المحادثة -  </title>
+  <title> المحادثة الجماعية  </title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700&display=swap" rel="stylesheet">
   <style>
@@ -216,7 +216,7 @@
   </button>
 
 <header>
-  <h1>المحادثة -  </h1>
+  <h1>المحادثة الجماعية   </h1>
 </header>
 
 <div class="container">

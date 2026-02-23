@@ -3,319 +3,787 @@
 <html lang="ar" dir="rtl">
 <head>
   <meta charset="UTF-8">
-  <title>الإضاءات -  </title>
+  <title>الإضاءات - </title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700&display=swap" rel="stylesheet">
   <style>
-    /* --- عام --- */
+    :root{
+      --bg:#f3f6fb;
+      --card:#ffffff;
+      --text:#0f172a;
+      --muted:#64748b;
+      --border:#e5e7eb;
+      --primary:#253b5c;
+      --primary-dark:#1f2f48;
+      --primary-2:#2563eb;
+      --accent:#ffec1d;
+      --danger:#ef4444;
+      --shadow: 0 12px 34px rgba(15,23,42,.10);
+      --shadow-sm: 0 6px 18px rgba(15,23,42,.08);
+      --radius: 20px;
+    }
+
     * { box-sizing: border-box; margin: 0; padding: 0; }
-    body { font-family: "Cairo", "Tahoma", sans-serif; background: #f5f7fa; color: #333; }
+    body{
+      font-family:"Cairo","Tahoma",sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.65;
+      min-height: 100vh;
+    }
+    a{ color:inherit; text-decoration:none; }
+    button{ font-family:inherit; }
 
-    /* الخلفية */
-    .background {
-      position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-      background: url('/a.jpg') no-repeat center center;
-      background-size: cover; filter: blur(10px) brightness(0.7); z-index: -1;
+    .container{
+      width:min(1200px, calc(100% - 32px));
+      margin-inline:auto;
     }
 
-    /* الهيدر */
-    header {
-      background: linear-gradient(90deg, #253b5cff, #253b5cff);
-      color: #fff; display: flex; justify-content: space-between; align-items: center;
-      padding: 20px 25px; box-shadow: 0 4px 20px rgba(0,0,0,0.15);
-      position: sticky; top: 0; z-index: 900; min-height: 70px;
+    .background{
+      position:fixed;
+      inset:0;
+      background:
+        radial-gradient(1200px 420px at 12% 0%, rgba(37,99,235,.14), transparent 55%),
+        radial-gradient(900px 360px at 92% 10%, rgba(255,236,29,.16), transparent 62%),
+        radial-gradient(800px 320px at 40% 100%, rgba(37,99,235,.08), transparent 55%),
+        #f8fafc;
+      z-index:-2;
     }
-    header h1 { font-size: 26px; font-weight: 700; text-align: center; flex: 1 1 auto; }
-    header .actions { display: flex; gap: 12px; align-items: center; flex-shrink: 0; }
-    header .actions a, header .actions button {
-      background: rgba(255,255,255,0.15); border: none; color: #fff; cursor: pointer;
-      display: flex; align-items: center; justify-content: center;
-      padding: 10px 12px; border-radius: 8px; transition: all 0.3s ease;
+
+    header{
+      position: sticky;
+      top: 0;
+      z-index: 900;
+      background: linear-gradient(90deg, var(--primary), var(--primary-dark));
+      color:#fff;
+      box-shadow: 0 8px 30px rgba(0,0,0,.15);
     }
-    header .actions a:hover, header .actions button:hover { background: rgba(255,255,255,0.3); }
-    header .actions svg { width: 24px; height: 24px; }
+    .header-inner{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:16px;
+      padding: 14px 0;
+      min-height: 68px;
+    }
+    .header-title{
+      display:flex;
+      align-items:center;
+      gap:10px;
+      font-weight:900;
+      font-size:22px;
+      text-align:center;
+      margin:0 auto;
+      white-space:nowrap;
+      overflow:hidden;
+      text-overflow:ellipsis;
+      max-width: 70vw;
+    }
+    .badge{
+      font-size: 12px;
+      font-weight: 900;
+      padding: 4px 10px;
+      border-radius: 999px;
+      background: rgba(255,255,255,.14);
+      border: 1px solid rgba(255,255,255,.18);
+      color: rgba(255,255,255,.92);
+      white-space:nowrap;
+    }
+    .header-actions{
+      display:flex;
+      gap:10px;
+      align-items:center;
+      flex-shrink:0;
+    }
+    .icon-btn{
+      background: rgba(255,255,255,.14);
+      border: 1px solid rgba(255,255,255,.18);
+      color:#fff;
+      cursor:pointer;
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      width:42px;
+      height:42px;
+      border-radius:14px;
+      transition:.22s;
+      outline:none;
+    }
+    .icon-btn:hover{ background: rgba(255,255,255,.24); transform: translateY(-1px); }
+    .icon-btn:focus-visible{ box-shadow: 0 0 0 3px rgba(37,99,235,.45); }
+    .icon-btn svg{ width:22px; height:22px; }
 
-    /* زر القائمة */
-    .menu-btn { flex-shrink: 0; position: fixed; top: 20px; right: 20px; background: #253b5cff; color: #fff;
-      border: none; border-radius: 12px; padding: 10px 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.25);
-      cursor: pointer; transition: background 0.3s, transform 0.2s; z-index: 1100; }
-    .menu-btn svg { width: 26px; height: 26px; }
-    .menu-btn:hover { background: #2563eb; transform: translateY(-1px); }
+    .menu-btn{
+      position: fixed;
+      top: 18px;
+      right: 18px;
+      z-index: 1100;
+      width:46px;
+      height:46px;
+      border:none;
+      border-radius: 16px;
+      cursor:pointer;
+      background: rgba(255,255,255,.14);
+      border: 1px solid rgba(255,255,255,.18);
+      color:#fff;
+      box-shadow: 0 12px 26px rgba(0,0,0,.22);
+      backdrop-filter: blur(10px);
+      transition: .22s;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+    }
+    .menu-btn:hover{ background: rgba(255,255,255,.24); transform: translateY(-1px); }
+    .menu-btn svg{ width:26px; height:26px; }
 
-    
-/* القائمة الجانبية */
-.sidebar {
-  position: fixed;
-  top: 0;
-  right: -280px;
-  width: 280px;
-  height: 100%;
-  background: #253b5cff;
-  color: #fff;
-  padding: 25px 20px;
-  box-shadow: -4px 0 20px rgba(0,0,0,0.3);
-  transition: right 0.4s ease;
-  z-index: 1000;
-  border-radius: 8px 0 0 8px;
-  overflow-y: auto;
-}
-.sidebar.open { right: 0; }
-.sidebar-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 25px;
-}
-.sidebar h2 { font-size: 18px; font-weight: 700; }
-.sidebar .close-btn {
-  background: none;
-  border: none;
-  color: #fff;
-  font-size: 24px;
-  cursor: pointer;
-}
-.sidebar .close-btn:hover { color: #253b5cff; }
+    .overlay{
+      position: fixed;
+      inset:0;
+      background: rgba(0,0,0,.45);
+      z-index: 1000;
+      display:none;
+    }
+    .overlay.open{ display:block; }
 
-/* عناصر القائمة */
-.sidebar a {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  background: #2d3748;
-  border-radius: 14px;
-  padding: 14px;
-  margin-bottom: 12px;
-  text-decoration: none;
-  color: #fff;
-  transition: all 0.25s ease;
-}
-.sidebar a:hover {
-  background: #ffec1dff;
-}
-.sidebar a svg {
-  width: 22px;
-  height: 22px;
-}
-    /* محتوى الإضاءات */
-    main { padding: 100px 40px 40px 40px; display: grid; grid-template-columns: repeat(3, 1fr); gap: 30px; }
-    .card-light { background: #fff; border-radius: 20px; padding: 25px; text-align: center; box-shadow: 0 8px 25px rgba(0,0,0,0.12);
-      transition: transform 0.35s, box-shadow 0.35s; display: flex; flex-direction: column; align-items: center; }
-    .card-light:hover { transform: translateY(-6px); box-shadow: 0 12px 30px rgba(0,0,0,0.18); }
-    .card-light img { width: 100%; height: 180px; object-fit: cover; border-radius: 12px; margin-bottom: 15px; }
-    .card-light h3 { font-size: 20px; font-weight: 700; color: #253b5cff; margin-bottom: 10px; }
-    .card-light p { font-size: 16px; font-weight: 600; color: #555; margin-bottom: 10px; }
-    .card-light .actions { display: flex; gap: 10px; justify-content: center; margin-top: 10px; }
-    .card-light .actions a, .card-light .actions button { padding: 8px 12px; border-radius: 8px; font-weight: 600; cursor: pointer; text-decoration: none; }
-    .card-light .actions a { background: #2563eb; color: #fff; }
-    .card-light .actions button { background: #ff4d4d; color: #fff; border: none; }
+    .sidebar{
+      position: fixed;
+      top: 0;
+      right: -340px;
+      width: 310px;
+      max-width: calc(100% - 48px);
+      height: 100%;
+      background: linear-gradient(180deg, var(--primary), var(--primary-dark));
+      color:#fff;
+      padding: 18px;
+      box-shadow: -14px 0 34px rgba(0,0,0,.35);
+      transition: right .32s ease;
+      z-index: 1101;
+      border-radius: 22px 0 0 22px;
+      overflow:auto;
+    }
+    .sidebar.open{ right: 0; }
 
-    /* زر إضافة إضاءة */
-    .add-light-btn { position: fixed; bottom: 30px; right: 30px; background: #2563eb; color: #fff; border: none; padding: 15px 20px; border-radius: 12px; font-size: 16px; cursor: pointer; box-shadow: 0 8px 20px rgba(0,0,0,0.25); z-index: 1200; }
-    .add-light-btn:hover { background: #1e4bb8; }
+    .sidebar-header{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:12px;
+      margin-bottom: 16px;
+      padding-bottom: 12px;
+      border-bottom: 1px solid rgba(255,255,255,.14);
+    }
+    .sidebar h2{ font-size:18px; font-weight:900; }
+    .close-btn{
+      width:42px;height:42px;
+      border-radius:14px;
+      border: 1px solid rgba(255,255,255,.18);
+      background: rgba(255,255,255,.10);
+      color:#fff;
+      cursor:pointer;
+      transition:.2s;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      font-size:22px;
+      line-height:1;
+    }
+    .close-btn:hover{ background: rgba(255,255,255,.20); }
 
-    /* مودال الإضافة والتعديل */
-    .modal { display: none; position: fixed; top:0; left:0; width:100%; height:100%; background: rgba(0,0,0,0.6); z-index: 1300; overflow-y:auto; }
-    .modal .modal-content { background:#fff; border-radius:20px; max-width:500px; margin:80px auto; padding:30px; position:relative; }
-    .modal h2 { text-align:center; margin-bottom:25px; }
-    .modal form { display:flex; flex-direction:column; gap:15px; }
-    .modal input, .modal select { padding:10px; font-size:16px; border-radius:8px; border:1px solid #ccc; }
-    .modal button[type="submit"] { background:#2563eb; color:#fff; border:none; padding:10px; border-radius:8px; font-weight:600; cursor:pointer; }
-    .modal button.close-modal { position:absolute; top:15px; right:15px; background:#ff4d4d; color:#fff; border:none; border-radius:50%; width:35px; height:35px; font-size:20px; cursor:pointer; }
+    .sidebar a{
+      display:flex;
+      align-items:center;
+      gap:12px;
+      padding: 12px 12px;
+      border-radius: 16px;
+      text-decoration:none;
+      color:#fff;
+      background: rgba(255,255,255,.08);
+      border: 1px solid rgba(255,255,255,.10);
+      margin-bottom: 10px;
+      transition:.22s;
+    }
+    .sidebar a:hover{
+      background: rgba(255,236,29,.92);
+      color:#111827;
+      transform: translateX(-2px);
+    }
+    .sidebar a svg{ width:22px; height:22px; }
 
-    @media (max-width: 1024px) { main { grid-template-columns: repeat(2, 1fr); } }
-    @media (max-width: 768px) { main { grid-template-columns: 1fr; padding: 80px 10px 20px 10px; gap: 30px; } }
+    main{
+      padding: 22px 0 70px;
+    }
+
+    .page-head{
+      margin-top: 18px;
+      display:flex;
+      align-items:flex-start;
+      justify-content:space-between;
+      gap:12px;
+      flex-wrap:wrap;
+    }
+    .page-title{
+      color: var(--primary);
+      font-size: 20px;
+      font-weight: 900;
+      display:flex;
+      align-items:center;
+      gap:10px;
+    }
+    .page-sub{
+      color: var(--muted);
+      font-size: 14px;
+      margin-top: 6px;
+    }
+
+    .grid{
+      margin-top: 14px;
+      display:grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
+    }
+
+    .card-light{
+      background: rgba(255,255,255,.94);
+      border: 1px solid rgba(255,255,255,.82);
+      border-radius: 22px;
+      box-shadow: var(--shadow);
+      overflow:hidden;
+      transition: transform .22s, box-shadow .22s, background .22s;
+      display:flex;
+      flex-direction:column;
+      min-height: 280px;
+    }
+    .card-light:hover{
+      transform: translateY(-6px);
+      box-shadow: 0 18px 46px rgba(0,0,0,.16);
+      background:#fff;
+    }
+
+    .card-media{
+      position:relative;
+      width:100%;
+      height: 170px;
+      background: #eaf0ff;
+    }
+    .card-media img{
+      width:100%;
+      height:100%;
+      object-fit: cover;
+      display:block;
+    }
+    .card-body{
+      padding: 14px 14px 16px;
+      display:flex;
+      flex-direction:column;
+      gap: 10px;
+      flex: 1 1 auto;
+    }
+
+    .card-title{
+      font-size: 16px;
+      font-weight: 900;
+      color: var(--primary);
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:10px;
+    }
+    .pill{
+      font-size: 12px;
+      font-weight: 900;
+      padding: 6px 10px;
+      border-radius: 999px;
+      border: 1px solid var(--border);
+      background: #f8fafc;
+      color:#334155;
+      white-space:nowrap;
+    }
+    .pill.yes{
+      background: rgba(16,185,129,.12);
+      border-color: rgba(16,185,129,.25);
+      color: #065f46;
+    }
+    .pill.no{
+      background: rgba(239,68,68,.12);
+      border-color: rgba(239,68,68,.25);
+      color: #7f1d1d;
+    }
+
+    .meta{
+      display:flex;
+      flex-direction:column;
+      gap:6px;
+      color: var(--muted);
+      font-size: 13px;
+      font-weight: 700;
+    }
+    .meta strong{
+      color:#334155;
+      font-weight: 900;
+    }
+
+    .card-actions{
+      margin-top:auto;
+      display:flex;
+      gap:10px;
+      flex-wrap:wrap;
+      align-items:center;
+      justify-content:flex-end;
+      padding-top: 4px;
+    }
+
+    .btn{
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      gap:8px;
+      padding: 10px 14px;
+      border-radius: 14px;
+      border: 1px solid transparent;
+      cursor:pointer;
+      font-weight: 900;
+      font-size: 13px;
+      transition:.2s;
+      text-decoration:none;
+      white-space:nowrap;
+      user-select:none;
+    }
+    .btn-primary{ background: var(--primary-2); color:#fff; }
+    .btn-primary:hover{ filter: brightness(.96); transform: translateY(-1px); }
+    .btn-danger{ background: var(--danger); color:#fff; }
+    .btn-danger:hover{ filter: brightness(.96); transform: translateY(-1px); }
+    .btn-outline{
+      background:#fff;
+      border-color: var(--border);
+      color: var(--text);
+    }
+    .btn-outline:hover{ background:#f9fafb; transform: translateY(-1px); }
+
+    .add-light-btn{
+      position: fixed;
+      bottom: 22px;
+      left: 22px;
+      background: var(--primary-2);
+      color:#fff;
+      border:none;
+      padding: 14px 16px;
+      border-radius: 16px;
+      font-size: 14px;
+      font-weight: 900;
+      cursor:pointer;
+      box-shadow: 0 16px 34px rgba(0,0,0,0.22);
+      z-index: 1200;
+      transition: .2s;
+    }
+    .add-light-btn:hover{ filter: brightness(.96); transform: translateY(-1px); }
+
+    .modal{
+      display:none;
+      position:fixed;
+      inset:0;
+      background: rgba(0,0,0,.55);
+      z-index: 1300;
+      padding: 18px;
+      align-items:center;
+      justify-content:center;
+      overflow:auto;
+    }
+    .modal.open{ display:flex; }
+    .modal-content{
+      width: min(560px, 100%);
+      max-height: 88vh;
+      overflow:auto;
+      background:#fff;
+      border-radius: 22px;
+      border: 1px solid var(--border);
+      box-shadow: 0 24px 60px rgba(0,0,0,.30);
+      padding: 18px;
+      animation: pop .18s ease;
+      position:relative;
+    }
+    .modal-head{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:12px;
+      padding-bottom: 10px;
+      border-bottom: 1px solid #eef2f7;
+      margin-bottom: 12px;
+    }
+    .modal-title{
+      font-weight: 900;
+      color: var(--primary);
+      font-size: 18px;
+    }
+    .x-btn{
+      width:42px;height:42px;border-radius:14px;
+      border:1px solid var(--border);
+      background:#f9fafb;
+      cursor:pointer;
+      font-size:20px;
+      line-height:1;
+      transition:.2s;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+    }
+    .x-btn:hover{ background:#eef2f7; }
+
+    .stack{ display:flex; flex-direction:column; gap: 12px; }
+    .field{ display:flex; flex-direction:column; gap:6px; }
+    label{ font-weight:900; color:#334155; font-size: 13px; }
+
+    .control{
+      width:100%;
+      padding: 11px 12px;
+      border-radius: 14px;
+      border: 1px solid var(--border);
+      font-size: 14px;
+      background:#fff;
+      outline:none;
+      transition:.2s;
+    }
+    .control:focus{
+      border-color: rgba(37,99,235,.55);
+      box-shadow: 0 0 0 3px rgba(37,99,235,.18);
+    }
+
+    .modal-actions{
+      display:flex;
+      gap:10px;
+      flex-wrap:wrap;
+      margin-top: 6px;
+      justify-content:flex-end;
+    }
+
+    .preview{
+      display:flex;
+      align-items:center;
+      gap:10px;
+      padding: 10px;
+      border: 1px dashed #dbe3f0;
+      border-radius: 16px;
+      background:#fbfdff;
+    }
+    .preview img{
+      width: 110px;
+      height: 80px;
+      object-fit: cover;
+      border-radius: 14px;
+      border: 1px solid var(--border);
+    }
+
+    @keyframes pop{
+      from{ opacity:0; transform: translateY(10px) scale(.985); }
+      to{ opacity:1; transform: translateY(0) scale(1); }
+    }
+
+    @media (max-width: 1024px){
+      .grid{ grid-template-columns: repeat(2, 1fr); }
+    }
+    @media (max-width: 768px){
+      .grid{ grid-template-columns: 1fr; }
+      .add-light-btn{ left: 14px; bottom: 14px; }
+      .container{ width: calc(100% - 24px); }
+    }
+    @media (prefers-reduced-motion: reduce){
+      *{ transition:none !important; animation:none !important; }
+    }
   </style>
 </head>
 <body>
   <div class="background"></div>
 
-  <!-- زر القائمة -->
-  <button class="menu-btn" id="menuBtn" onclick="toggleSidebar()">
+  <button class="menu-btn" id="menuBtn" type="button" aria-label="فتح القائمة" onclick="toggleSidebar()">
     <svg xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-      <path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7"/>
+      <path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16"/>
     </svg>
   </button>
 
-  <!-- الهيدر -->
   <header>
-    <h1>الإضاءات</h1>
-    <div class="actions">
-      <a href="{{ route('my.profile') }}" title="حسابي">
-        <svg xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-width="2"
-             viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round"
-                d="M5.121 17.804A13.937 13.937 0 0112 15a13.937 13.937 0 016.879 2.804M15 10a3 3 0 11-6 0 3 3 0 016 0z"/>
-        </svg>
-      </a>
-      <form method="POST" action="{{ route('logout') }}">
-        @csrf
-        <button type="submit" title="تسجيل خروج">
+    <div class="container header-inner">
+      <div style="width:46px; height:46px; flex-shrink:0;"></div>
+
+      <h1 class="header-title">
+        الإضاءات
+        <span class="badge">إدارة</span>
+      </h1>
+
+      <div class="header-actions">
+        <a class="icon-btn" href="{{ route('my.profile') }}" title="حسابي" aria-label="حسابي">
           <svg xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-width="2"
                viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round"
-                  d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a2 2 0 01-2 2H7a2 2 0 01-2-2v-1m0-10V5a2 2 0 012-2h4a2 2 0 012 2v1"/>
+                  d="M5.121 17.804A13.937 13.937 0 0112 15a13.937 13.937 0 016.879 2.804M15 10a3 3 0 11-6 0 3 3 0 016 0z"/>
           </svg>
-        </button>
-      </form>
+        </a>
+
+        <form method="POST" action="{{ route('logout') }}">
+          @csrf
+          <button class="icon-btn" type="submit" title="تسجيل خروج" aria-label="تسجيل خروج">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-width="2"
+                 viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round"
+                    d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a2 2 0 01-2 2H7a2 2 0 01-2-2v-1m0-10V5a2 2 0 012-2h4a2 2 0 012 2v1"/>
+            </svg>
+          </button>
+        </form>
+      </div>
     </div>
   </header>
-<div class="sidebar" id="sidebar">
-  <div class="sidebar-header">
-    <h2>القائمة</h2>
-    <button class="close-btn" onclick="toggleSidebar()">×</button>
+
+  <div class="overlay" id="overlay" onclick="closeSidebar()"></div>
+
+  <div class="sidebar" id="sidebar" aria-label="القائمة الجانبية">
+    <div class="sidebar-header">
+      <h2>القائمة</h2>
+      <button class="close-btn" type="button" aria-label="إغلاق" onclick="closeSidebar()">×</button>
+    </div>
+
+    <a href="{{ route('plans.index') }}">
+      <svg xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+        <path d="M9 17v-6h13v6M9 5v6h13V5M3 7h2v10H3z"/>
+      </svg> الخطط
+    </a>
+
+    <a href="{{ route('tasks.index') }}">
+      <svg xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+        <path d="M12 20h9M12 4h9M4 9h16M4 15h16"/>
+      </svg> الواجبات
+    </a>
+
+    <a href="{{ route('teachers.index') }}">
+      <svg xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+        <path d="M5.121 17.804A13.937 13.937 0 0112 15a13.937 13.937 0 016.879 2.804M15 10a3 3 0 11-6 0 3 3 0 016 0z"/>
+      </svg> المعلمين
+    </a>
+
+    <a href="{{ route('students.index') }}">
+      <svg xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+        <path d="M5.121 17.804A13.937 13.937 0 0112 15a13.937 13.937 0 016.879 2.804M15 10a3 3 0 11-6 0 3 0 016 0z"/>
+      </svg> الطلاب
+    </a>
+
+    <a href="{{ route('absences.index') }}">
+      <svg xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+        <path d="M9 17v-6h13v6M9 5v6h13V5M3 7h2v10H3z"/>
+      </svg> الغيابات
+    </a>
+
+    <a href="{{ route('calendars.index') }}">
+      <svg xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+        <path d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/>
+      </svg> التقويم
+    </a>
+
+    <a href="{{ route('files.index') }}">
+      <svg xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-2m0-4h4m-4 4h4"/>
+      </svg> الملفات
+    </a>
+
+    <a href="{{ route('fins.index') }}">
+      <svg xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M12 8c-1.333 0-4 1.333-4 4s2.667 4 4 4 4-1.333 4-4-2.667-4-4-4zM12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"/>
+      </svg> الإدارة المالية
+    </a>
+
+    <a href="{{ route('recitations.index') }}">
+      <svg xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M12 20h9M12 4h9M4 9h16M4 15h16"/>
+      </svg> التسميع
+    </a>
+
+    <a href="{{ route('control_page') }}">الرئيسية</a>
   </div>
-  
-  <a href="{{ route('plans.index') }}">
-    <svg xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-      <path d="M9 17v-6h13v6M9 5v6h13V5M3 7h2v10H3z"/>
-    </svg> الخطط
-  </a>
-  
-  <a href="{{ route('tasks.index') }}">
-    <svg xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-      <path d="M12 20h9M12 4h9M4 9h16M4 15h16"/>
-    </svg> الواجبات
-  </a>
-  
-  <a href="{{ route('teachers.index') }}">
-    <svg xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-      <path d="M5.121 17.804A13.937 13.937 0 0112 15a13.937 13.937 0 016.879 2.804M15 10a3 3 0 11-6 0 3 3 0 016 0z"/>
-    </svg> المعلمين
-  </a>
-  
-  <a href="{{ route('students.index') }}">
-    <svg xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-      <path d="M5.121 17.804A13.937 13.937 0 0112 15a13.937 13.937 0 016.879 2.804M15 10a3 3 0 11-6 0 3 3 0 016 0z"/>
-    </svg> الطلاب
-  </a>
-  
-  <a href="{{ route('absences.index') }}">
-    <svg xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-      <path d="M9 17v-6h13v6M9 5v6h13V5M3 7h2v10H3z"/>
-    </svg> الغيابات
-  </a>
-  
-  <a href="{{ route('calendars.index') }}">
-    <svg xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-      <path d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/>
-    </svg> التقويم
-  </a>
 
-  <!-- العناصر الجديدة -->
-  <a href="{{ route('files.index') }}">
-    <svg xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-      <path stroke-linecap="round" stroke-linejoin="round" d="M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-2m0-4h4m-4 4h4"/>
-    </svg> الملفات
-  </a>
-
-  <a href="{{ route('fins.index') }}">
-    <svg xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-      <path stroke-linecap="round" stroke-linejoin="round" d="M12 8c-1.333 0-4 1.333-4 4s2.667 4 4 4 4-1.333 4-4-2.667-4-4-4zM12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"/>
-    </svg> الإدارة المالية
-  </a>
-
-  <a href="{{ route('recitations.index') }}">
-    <svg xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-      <path stroke-linecap="round" stroke-linejoin="round" d="M12 20h9M12 4h9M4 9h16M4 15h16"/>
-    </svg> التسميع
-  </a>
-
-  <a href="{{ route('control_page') }}">الرئيسية</a>
-</div>
-
-  <!-- محتوى الإضاءات -->
-  <main>
-    @foreach($lighting as $light)
-      <div class="card-light">
-@if(!empty($light->photo))
-    <img src="{{ $light->photo }}" alt=" ">
-@endif        <h3>{{ $light->subject }}</h3>
-        <p>العنوان: {{ $light-> lighting}}</p>
-        <p>متاح للطلاب: {{ $light->condition ?? '-' }}</p>
-        <div class="actions">
-          <button onclick="openEditModal({{ $light->id }})">تعديل</button>
-          <form method="POST" action="{{ route('lighting.destroy', $light->id) }}" onsubmit="return confirm('هل أنت متأكد من حذف هذه الإضاءة؟');">
-            @csrf
-            @method('DELETE')
-            <button type="submit">حذف</button>
-          </form>
-        </div>
+  <main class="container">
+    <div class="page-head">
+      <div>
+        <div class="page-title">قائمة الإضاءات <span class="badge" style="background:rgba(37,99,235,.16);border-color:rgba(37,99,235,.22);color:#0b3aa6;">عرض</span></div>
       </div>
+    </div>
 
-      <!-- مودال تعديل لكل إضاءة -->
-      <div id="editModal{{ $light->id }}" class="modal">
-        <div class="modal-content">
-          <button class="close-modal" onclick="closeEditModal({{ $light->id }})">×</button>
-          <h2>تعديل الإضاءة</h2>
+    <section class="grid">
+      @foreach($lighting as $light)
+        <div class="card-light">
+          <div class="card-media">
+            @if(!empty($light->photo))
+              <img src="{{ $light->photo }}" alt=" ">
+            @endif
+          </div>
 
-        <form method="POST" action="{{ route('lighting.update', $light->id) }}" enctype="multipart/form-data">
-    @csrf
-    @method('PUT')
+          <div class="card-body">
+            <div class="card-title">
+              <span>{{ $light->subject }}</span>
+              <span class="pill {{ ($light->condition ?? '')=='yes' ? 'yes' : 'no' }}">
+                {{ ($light->condition ?? '-')=='yes' ? 'متاح' : 'غير متاح' }}
+              </span>
+            </div>
 
-    <input type="text" name="subject" value="{{ $light->subject }}" placeholder="العنوان">
-    <input type="text" name="lighting" value="{{ $light->lighting }}" placeholder="الإضاءة">
+            <div class="meta">
+              <div><strong>العنوان:</strong> {{ $light->lighting }}</div>
+              <div><strong>متاح للطلاب:</strong> {{ $light->condition ?? '-' }}</div>
+            </div>
 
-    <select name="condition">
-        <option value="income" {{ $light->subject == 'yes' ? 'selected' : '' }}>متاح للطلاب</option>
-        <option value="expense" {{ $light->subject == 'no' ? 'selected' : '' }}>غير متاح للطلاب</option>
-    </select>
+            <div class="card-actions">
+              <button class="btn btn-primary" type="button" onclick="openEditModal({{ $light->id }})">تعديل</button>
 
-    <!-- عرض الصورة الحالية -->
-    @if($light->photo)
-        <div>
-            <img src="{{ asset($light->photo) }}" alt="الصورة الحالية" style="max-width: 150px; margin-bottom:10px;">
+              <form method="POST" action="{{ route('lighting.destroy', $light->id) }}" onsubmit="return confirm('هل أنت متأكد من حذف هذه الإضاءة؟');">
+                @csrf
+                @method('DELETE')
+                <button class="btn btn-danger" type="submit">حذف</button>
+              </form>
+            </div>
+          </div>
         </div>
-    @endif
 
-    <!-- رفع صورة جديدة -->
-    <input type="file" name="photo">
+        <div id="editModal{{ $light->id }}" class="modal" role="dialog" aria-modal="true">
+          <div class="modal-content">
+            <div class="modal-head">
+              <div class="modal-title">تعديل الإضاءة</div>
+              <button class="x-btn" type="button" aria-label="إغلاق" onclick="closeEditModal({{ $light->id }})">×</button>
+            </div>
 
-    <button type="submit">حفظ التعديلات</button>
-</form>
+            <form method="POST" action="{{ route('lighting.update', $light->id) }}" enctype="multipart/form-data" class="stack">
+              @csrf
+              @method('PUT')
 
+              <div class="field">
+                <label>العنوان</label>
+                <input class="control" type="text" name="subject" value="{{ $light->subject }}" placeholder="العنوان">
+              </div>
+
+              <div class="field">
+                <label>الإضاءة</label>
+                <input class="control" type="text" name="lighting" value="{{ $light->lighting }}" placeholder="الإضاءة">
+              </div>
+
+              <div class="field">
+                <label>متاح للطلاب</label>
+                <select class="control" name="condition">
+                  <option value="yes" {{ ($light->condition ?? '') == 'yes' ? 'selected' : '' }}>متاح للطلاب</option>
+                  <option value="no"  {{ ($light->condition ?? '') == 'no' ? 'selected' : '' }}>غير متاح للطلاب</option>
+                </select>
+              </div>
+
+              @if($light->photo)
+                <div class="preview">
+                  <img src="{{ asset($light->photo) }}" alt="الصورة الحالية">
+                  <div style="font-weight:900; color:#334155;">الصورة الحالية</div>
+                </div>
+              @endif
+
+              <div class="field">
+                <label>رفع صورة جديدة</label>
+                <input class="control" type="file" name="photo">
+              </div>
+
+              <div class="modal-actions">
+                <button class="btn btn-primary" type="submit">حفظ التعديلات</button>
+                <button class="btn btn-outline" type="button" onclick="closeEditModal({{ $light->id }})">إلغاء</button>
+              </div>
+            </form>
+          </div>
         </div>
-      </div>
-    @endforeach
+      @endforeach
+    </section>
   </main>
 
-  <!-- زر إضافة إضاءة -->
-  <button class="add-light-btn" onclick="openModal()">إضافة إضاءة</button>
+  <button class="add-light-btn" type="button" onclick="openModal()">➕ إضافة إضاءة</button>
 
-  <!-- مودال إضافة إضاءة -->
-  <div id="addLightingModal" class="modal">
+  <div id="addLightingModal" class="modal" role="dialog" aria-modal="true">
     <div class="modal-content">
-      <button class="close-modal" onclick="closeModal()">×</button>
-      <h2>إضافة إضاءة جديدة</h2>
-   <form method="POST" action="{{ route('lighting.store') }}" enctype="multipart/form-data">
-    @csrf
-    <input type="text" name="subject" placeholder="العنوان" >
-    <input type="text" name="lighting" placeholder="الإضاءة" >
-    <select name="condition" >
-      <option value="" disabled selected>اختر الحالة</option>
-      <option value="yes">متاح للطلاب</option>
-      <option value="no">غير متاح للطلاب</option>
-    </select>
-    <input type="file" name="photo" > <!-- رفع صورة -->
-    <button type="submit">إضافة</button>
-</form>
+      <div class="modal-head">
+        <div class="modal-title">إضافة إضاءة جديدة</div>
+        <button class="x-btn" type="button" aria-label="إغلاق" onclick="closeModal()">×</button>
+      </div>
 
+      <form method="POST" action="{{ route('lighting.store') }}" enctype="multipart/form-data" class="stack">
+        @csrf
 
+        <div class="field">
+          <label>العنوان</label>
+          <input class="control" type="text" name="subject" placeholder="العنوان">
+        </div>
+
+        <div class="field">
+          <label>الإضاءة</label>
+          <input class="control" type="text" name="lighting" placeholder="الإضاءة">
+        </div>
+
+        <div class="field">
+          <label>الحالة</label>
+          <select class="control" name="condition">
+            <option value="" disabled selected>اختر الحالة</option>
+            <option value="yes">متاح للطلاب</option>
+            <option value="no">غير متاح للطلاب</option>
+          </select>
+        </div>
+
+        <div class="field">
+          <label>رفع صورة</label>
+          <input class="control" type="file" name="photo">
+        </div>
+
+        <div class="modal-actions">
+          <button class="btn btn-primary" type="submit">إضافة</button>
+          <button class="btn btn-outline" type="button" onclick="closeModal()">إلغاء</button>
+        </div>
+      </form>
     </div>
   </div>
 
 <script>
   function toggleSidebar() {
     const sidebar = document.getElementById("sidebar");
-    const menuBtn = document.getElementById("menuBtn");
-    sidebar.classList.toggle("open");
-    menuBtn.style.display = sidebar.classList.contains("open") ? "none" : "block";
+    const overlay = document.getElementById("overlay");
+    const isOpen = sidebar.classList.toggle("open");
+    overlay.classList.toggle("open", isOpen);
+    document.body.style.overflow = isOpen ? 'hidden' : '';
   }
 
-  function openModal() { document.getElementById('addLightingModal').style.display = 'block'; }
-  function closeModal() { document.getElementById('addLightingModal').style.display = 'none'; }
+  function closeSidebar(){
+    document.getElementById("sidebar").classList.remove("open");
+    document.getElementById("overlay").classList.remove("open");
+    document.body.style.overflow = '';
+  }
 
-  function openEditModal(id) { document.getElementById('editModal'+id).style.display='block'; }
-  function closeEditModal(id) { document.getElementById('editModal'+id).style.display='none'; }
+  function openModal() {
+    document.getElementById('addLightingModal').classList.add('open');
+    document.body.style.overflow = 'hidden';
+  }
+  function closeModal() {
+    document.getElementById('addLightingModal').classList.remove('open');
+    document.body.style.overflow = '';
+  }
+
+  function openEditModal(id) {
+    document.getElementById('editModal'+id).classList.add('open');
+    document.body.style.overflow = 'hidden';
+  }
+  function closeEditModal(id) {
+    document.getElementById('editModal'+id).classList.remove('open');
+    document.body.style.overflow = '';
+  }
+
+  document.querySelectorAll('.modal').forEach(modal => {
+    modal.addEventListener('click', (e) => {
+      if(e.target === modal){
+        modal.classList.remove('open');
+        document.body.style.overflow = '';
+      }
+    });
+  });
+
+  document.addEventListener('keydown', (e) => {
+    if(e.key === 'Escape'){
+      closeModal();
+      closeSidebar();
+      document.querySelectorAll('[id^="editModal"]').forEach(m => m.classList.remove('open'));
+      document.body.style.overflow = '';
+    }
+  });
 </script>
 </body>
 </html>

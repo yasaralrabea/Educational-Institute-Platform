@@ -9,5 +9,5 @@ class Calendar extends Model
 {
     use SoftDeletes; 
 
-    protected $fillable = ['date', 'goal', 'condition'];
+    protected $fillable = ['date', 'goal', 'condition', 'students'];
 }

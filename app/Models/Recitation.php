@@ -12,6 +12,7 @@ class Recitation extends Model
         'notes',
         'name',
         'date',
+        'condition'
     ];
 
     public function student()
